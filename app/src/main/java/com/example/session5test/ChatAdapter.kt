@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.session5test.Modules.ModelMessageAdapter
+import com.example.session5test.Modules.ModelUser.Companion.calcColorAlphaForIdUser
 
 import com.example.session5test.databinding.ItemMessageMyBinding
 import com.example.session5test.databinding.ItemMessageOtherBinding
@@ -18,12 +19,14 @@ class ChatAdapter(private val messages:MutableList<ModelMessageAdapter>, ): Recy
         override fun bind(modelMessage: ModelMessageAdapter) {
             binding.message.text = modelMessage.message
             binding.datetime.text = modelMessage.datetime
+            binding.backgroundMessage.setBackgroundColor(Info.idUser.calcColorAlphaForIdUser())
         }
     }
     class OtherVH(private val binding: ItemMessageOtherBinding):ChatHolder(binding.root){
         override fun bind(modelMessage: ModelMessageAdapter) {
             binding.message.text = modelMessage.message
             binding.datetime.text = modelMessage.datetime
+            binding.backgroundMessage.setBackgroundColor(modelMessage.user.getColorAlphaCard())
         }
     }
 

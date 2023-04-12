@@ -41,3 +41,9 @@ data class ModelMessageAdapter(
     val isYou: Boolean,
     val isAudio: Boolean,
 )
+data class SendMessage(
+    val text:String,
+    val idChat:Int,
+    val isAudio: Boolean
+
+)

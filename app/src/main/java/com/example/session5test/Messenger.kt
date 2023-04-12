@@ -1,8 +1,10 @@
 package com.example.session5test
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.session5test.Modules.*
@@ -32,8 +34,7 @@ class Messenger : AppCompatActivity(),Callback, com.example.session5test.Callbac
                 startActivity(intent)
             }
         })
-        val messenger = ActivityMessengerBinding.inflate(layoutInflater)
-        setContentView(messenger.root)
+        
 
         Connection.client.connect()
         Connection.callbacks.add(this)
@@ -67,5 +68,21 @@ class Messenger : AppCompatActivity(),Callback, com.example.session5test.Callbac
 
     override fun onPerson(modelUser: ModelUser) {
         binding.nickname.text = modelUser.lastname[0].toString()
+        binding.cardView.setCardBackgroundColor(modelUser.getColorCard())
     }
+}
+fun showAlertDialog(
+    context: Context,
+    title: String,
+    message: String
+){
+    AlertDialog.Builder(context)
+        .setTitle(title)
+        .setMessage(message)
+        .setNegativeButton("Повторить еще раз", null)
+        .show()
+}
+
+fun showError(context: Context, error: String){
+    showAlertDialog(context, "Ошибка", error)
 }

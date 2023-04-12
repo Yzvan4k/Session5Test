@@ -30,13 +30,36 @@ class activityChat : AppCompatActivity(), Callback{
         chat = Gson().fromJson(intent.getStringExtra("jsonDataChat"), ModelDataChat::class.java)
 
         adapter = ChatAdapter(mutableListOf())
+
         binding.recChat.apply {
             layoutManager = LinearLayoutManager(this@activityChat)
+        }
+
+        binding.back.setOnClickListener {
+            finish()
+        }
+
+        loadHistory()
+        fillInfoChat()
+
+        binding.send.setOnClickListener {
+            val modelSendMessage = SendMessage(binding.messageText.text.toString(),chat.id,false)
+            Connection.client.send(Gson().toJson(modelSendMessage))
+            binding.messageText.setText("")
         }
 
     }
     private fun showToast(message: String){
         runOnUiThread { Toast.makeText(this, message, Toast.LENGTH_LONG).show() }
+    }
+    private fun loadHistory() {
+        Connection.client.send("/chat ${chat.id}")
+    }
+    private fun fillInfoChat(){
+        val modelUser = chat.getOtherUser(idUser)
+        binding.fi.text = modelUser.getFI()
+        binding.chatCoverText.text = modelUser.lastname[0].toString()
+        binding.cardChat.setCardBackgroundColor(modelUser.getColorCard())
     }
 
     private fun getUser(idUser: Int): ModelUser {
@@ -72,10 +95,7 @@ class activityChat : AppCompatActivity(), Callback{
 
     override fun onChat(chat: ModelChat) {
 
-        binding.recChat.apply {
-            layoutManager = LinearLayoutManager(this@activityChat)
-            adapter = this@activityChat.adapter
-        }
+
         val messagesAdapter = chat.messages.map {
             it.toModelMessageAdapter(getUser(it.idUser),it.idUser == idUser)
         }.reversed()

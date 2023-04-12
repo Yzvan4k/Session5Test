@@ -17,7 +17,7 @@ object Connection {
 
 
 
-    const val url = "ws://95.31.130.149:8085/chat"
+    const val url = "ws://95.31.130.149:8085"
     val client = object:     WebSocketClient(URI("${url}/chat"), mapOf("idUser" to "6")){
         override fun onOpen(handshakedata: ServerHandshake?) {
             callbacks.forEach{
